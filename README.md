@@ -21,48 +21,112 @@
       - `reservation/add`
       - `reservation/get-reservation-list-by-user-id`
       - `reservation/get-reservation-list-by-store-id`
+    - Graphql
+      -  Author
+          createAuthor(name: "Elon", gender: "male",image: "haha.jpg", country: "indonesia",information: "haha", url: "http://fb.co.id"){
+            id,
+            name,
+            country, 
+            information
+          }
+
+          updateAuthor(
+            id: 3, 
+            name: "Elon X", 
+            gender: "male",
+            image: "haha.jpg", 
+            country: "indonesia",
+            information: "haha", 
+            url: "http://fb.co.id"
+          ){
+            id,
+            name,
+            country, 
+            information,
+            url
+          }
+
+        deleteAuthor(
+          id: 4
+        ){
+          id,
+          name,
+          country, 
+          information,
+          url
+        }
+        
+        Author
+        createMovie(
+          title: "Nextflix Oi",
+          sysnopsis: "Watching serial tv by house series",
+          genre: "adventure",
+          image: "pow.png",
+          url: "https://www.facebook.com/business/tools/ads-manager",
+          authorId: 2,
+          rate: 2,
+          category: ["action", "adventure", "drama"]
+        ){
+          id,
+          title,
+          sysnopsis, 
+          genre,
+          image,
+          url,
+          authorId,
+          rate
+        }
+      
+        updateMovie(
+          id:15,
+          title: "Nextflix Oi Update",
+          sysnopsis: "Watching serial tv by house series",
+          genre: "adventure",
+          image: "pow.png",
+          url: "https://www.facebook.com/business/tools/ads-manager",
+          authorId: 2,
+          rate: 2,
+        ){
+          id,
+          title,
+          sysnopsis, 
+          genre,
+          image,
+          url,
+          authorId,
+          rate
+        }
+      
+        deleteMovie(
+          id: 15
+        ){
+          id,
+          title,
+          sysnopsis, 
+          genre,
+          image
+        }
+      
+    }
+
+    query {
+        getAuthor(id: 1){
+            name
+        }
+        getAuthorList{
+            name,
+            country
+        }
+        getMovie(id: 9){
+            title
+        }
+        getMovieList{
+            title,
+            sysnopsis
+        }
     
-### All Method type is `POST`
-
-# Using Typescript and Create a Reservation App
-
-
-### Typescript Projesi Oluşturma Adımları
-
-**1)** Öncelikle typescript kütüphanesini kurmamız gerekiyor. `npm install -g typescript` komutu ile typescript kütüphanesini bilgisayarımıza global olarak kuruyoruz.
-
-**2)** tsconfig dosyası konfigürasyonu yapılmalıdır. Bir dizinde tsconfig.json dosyasının bulunması, dizinin bir typescript projesinin kökü olduğunu gösterir. `tscongif.json` projeyi derlemek için gereken kök dosyaları ve derleyici seçeneklerini belirtir.
-
-**3)** `tsc –init` komutu yeni bir tscongif.json oluşturmak için kullanılır. Oluşturulan bu tsconfig.json dosyasının içinde derleyiciye uygun bir şekilde varsayılan ayarlar gelir.
-   
- 
-    - Bazı tsconfig özellikleri;
-     - target: Derleyicinin çıkaracağı hedef javascript sürümünü belirtmemize izin verir.
-     - module: Derlenmiş javascript kodunda bir module yöneticisi kullanmamıza izin verir. (commonjs desteklenir ve node js de bir standartdır)
-     - strict: tip denetimi seçeneklerini etkinleştiren bir seçenek.
-     - esModuleInterop: es6 modullerini commonjs modüllerine derlememize izin verir.
-     - forceConsistentCasingInFileNames: true olarak ayarlanırsa büyük/küçük harf duyarlı dosya adlandırmayı etkinleştirir.
-     - outDir: Derlenmiş kodun çıkarılacağı yolu belirtir.
-     - rootDir: Derlenecek olan typescript kodunun yolunu gösterir.
-
-**4)** Projeyi derledikten sonra `tsconfig.json` dosyasında belirttiğimiz `outDir` adresinde projenin javascrit haline derlenmiş kodları bulunur. Derlenmiş projeyi çalıştırmak için node `{outDir}/app.js` komutu kullanılır.
-
-**5)** Bu işlemlerin ardından `package.json` dosyasını güncelliyoruz. Öncelikle `npm install -D concurrently nodemon` komutunu kullanarak paketimiz kuruyoruz.
-
-   - Daha sonra `package.json` dosyasını güncelliyoruz.
-      ![](./images/package.png)
-
-**7)** tsc komutu ile projemizi build ediyoruz. Bu noktada bizim yazdığımız typescript kodları javascript kodlarına derlenecektir. Derlenen kodlar tsconfig.json içinde bulunan outDir klasörü içinde bulunur. 
-
-**8)** start komutu ile derlenen javascript kodunu çalıştırıyoruz.
-
-**9)** Yapılan bu işlemleri her kod değişikliğinde tek tek yapmak maliyetli olacağından dolayı bu işleri otomatize edecek bir script yazıyoruz. Burda kullandığımız concurrently paketi aynı anda birden fazla komut çalıştırmak için kullanıyoruz. nodemon paketini ise kodumuzda bir değişiklik olduğunda bunu algılayıp projeyi yeniden çalıştırmak için kullanıyoruz. dev komutunu çalıştırdığımızda önce yazdığımız typescript kodlarını javascript koduna derleyip daha sonra derlenen bu kodu nodemon ile çalıştırıyoruz.  Bu sayede kodumuzda değişiklik yaptığımızda otomatik olarak proje tekrar çalıştırılacaktır.
 
 
 ### Proje Başlatmak için
 - `npm run dev` for build 
 - `docker-compose up` for docker compose
- 
-
-    []: # Language: typescript
-    []: # Path: src/index.ts
