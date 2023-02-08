@@ -1,0 +1,62 @@
+version: '3.8'
+services:
+  node:
+      build: .
+      ports:
+        - 3000:3000
+      volumes:
+        - ./:/usr/src/app
+      depends_on:
+        - postgres
+      networks:
+        - postgres-backend
+  postgres:
+    container_name: postgres-typescript-db
+    image: postgres:14.0
+    volumes:
+      # - postgres:/data/postgresql
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - 5430:5432
+      # - "6500:5432"
+    # environment:
+    #   POSTGRES_USER: root
+    #   POSTGRES_PASSWORD: toor
+    #   POSTGRES_DB: reservation
+    env_file:
+      - ./.env
+    networks:
+      - postgres-backend
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redisDB:/data
+  elasticsearch:
+    container_name: tqd-elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.0.1
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    environment:
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
+    logging:
+      driver: none
+    ports:
+      - 9300:9300
+      - 9200:9200
+    networks: 
+      - postgres-backend
+
+volumes:
+  postgres:
+    name: backend
+  redisDB:
+  esdata:
+
+
+networks:
+  postgres-backend:

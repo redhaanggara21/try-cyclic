@@ -1,0 +1,7 @@
+references development:
+
+1. node-redis: https://github.com/wpcodevo/node_prisma_postgresql/blob/jwt_auth_verify_email/docker-compose.yml
+2. https://sebhastian.com/sequelize-migration/
+3. elastic search: 
+https://towardsdatascience.com/full-text-search-with-node-js-and-elasticsearch-on-docker-edcea23612fd
+https://medium.com/edonec/part-ii-adding-and-searching-document-elastic-search-with-express-typescipt-21461c5157c
