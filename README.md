@@ -23,7 +23,7 @@
       - `reservation/get-reservation-list-by-store-id`
     - Graphql
       - http://localhost:5001/graphiql
-      - for run execute better check in the dir collection then find graphql-collection 
+      - for run execute better check in the dir collection then find graphql-collections 
 
 
 ### Run
