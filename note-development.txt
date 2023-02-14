@@ -7,3 +7,41 @@ https://towardsdatascience.com/full-text-search-with-node-js-and-elasticsearch-o
 https://medium.com/edonec/part-ii-adding-and-searching-document-elastic-search-with-express-typescipt-21461c5157c
 4. https://itnext.io/production-ready-node-js-rest-apis-setup-using-typescript-postgresql-and-redis-a9525871407
 https://reyhanhamidi.medium.com/sequelize-automatic-database-migration-and-seeding-on-heroku-fb88cf09573b
+
+
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "./index.ts",
+            "use": "@vercel/node"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "/src/app.ts"
+        },{
+            "src": "/user",
+            "method": [
+                "POST",
+                "GET",
+                "DELETE",
+                "PUT"
+            ],
+            "dest": "/src/app.ts"
+        }
+    ]
+}
+      {
+        "src": "./src/app.ts",
+        "use": "@vercel/node"
+      }
+    ],
+    "routes": [
+      {
+        "src": "./src/(.*)",
+        "dest": "/"
+      }
+    ]
+  }
