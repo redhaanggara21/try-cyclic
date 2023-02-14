@@ -1,8 +1,7 @@
 import MovieService from "../../service/MovieService";
 import AuthorService from "../../service/AuthorService";
 import CategoryMovieService from "../../service/CategoryMovieService";
-import { buildSchema } from "graphql";
-import { any } from "zod";
+import redis from "../../config/isCached";
 
 const authorService = new AuthorService();
 const movieService = new MovieService();
@@ -11,15 +10,33 @@ const categoryMovieService = new CategoryMovieService();
 const movieResolver = {
   Query: {
     getMovie: async (_parent: undefined, { id }: { id?: number }) => {
-      if (!id) {
-        return movieService.getAll();
-      }
 
-      return movieService.getById(id);
+        const movieCache = await redis.get('movieall');
+        
+        if (movieCache) {
+            return movieCache;
+        }else{
+          if (!id) {
+            const datas = movieService.getAll();
+            await redis.set('movieall', datas);
+            return datas;
+          }else {
+            return movieService.getById(id);
+          }
+        } 
+    },
+
+    getMovieSearch: async (
+      _parent: undefined,
+      { search }: { search: String }
+    ) => {
+      // return await movieService.getAll()
+      return await movieService.getMovieSearch(search);
     },
 
     getMovieList: async () => {
         return await movieService.getAll()
+        // return await movieService.getByTitle("Nextflix Oi");
     },
 
     getBestMoviePerAuthor: async (

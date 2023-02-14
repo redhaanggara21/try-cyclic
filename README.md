@@ -22,7 +22,7 @@
       - `reservation/get-reservation-list-by-user-id`
       - `reservation/get-reservation-list-by-store-id`
     - Graphql
-      - http://localhost:501/graphiql
+      - http://localhost:5001/graphiql
       - for run execute better check in the dir collection then find graphql-collection 
 
 

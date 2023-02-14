@@ -102,4 +102,7 @@ query {
         title,
         sysnopsis
     }
+    getMovieSearch(search: "Nextflix Oi X"){
+     title
+   }
 }
