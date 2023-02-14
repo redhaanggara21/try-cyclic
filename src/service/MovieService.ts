@@ -2,8 +2,8 @@ import IMovie from "../Interface/IMovie";
 import IMovieRepo from "../Repository/IMovieRepo";
 import Movie from "../models/Movie";
 import sequelize from "sequelize/types/sequelize";
-import { Transaction } from "sequelize";
-
+import { Transaction, Op } from "sequelize";
+import elasticsearchClient from '../config/elasticsearch';
 export default class MovieService implements IMovieRepo {
 
     public async getAll(): Promise<IMovie[]> {
@@ -27,7 +27,30 @@ export default class MovieService implements IMovieRepo {
     }
 
     async getByTitle(title: string): Promise<IMovie | any> {
-        return await Movie.findOne( { where: { title: title } } );
+        return await Movie.findOne( { where: { id: 60 } } );
+    }
+
+    async getMovieSearch(search: String): Promise<IMovie | any> {
+
+        // const result = await elasticsearchClient.search({
+        //     index: 'movies',
+        //     type: 'movies',
+        //     q: search
+        // });
+
+        // const ids = result.hits.hits.map((item: any) => {
+        //     return item?.id
+        // });
+
+        // console.log(ids);
+
+        const movies = await Movie.findAll({where:{
+            title: {
+              [Op.like]:  '%' + search + '%'
+            },
+          }})
+
+        return movies;
     }
 
     async getBestMoviePerAuthor(limit?: number | any): Promise<IMovie| any> {

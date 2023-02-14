@@ -1,16 +1,12 @@
 import cors from 'cors';
 import express from 'express';
-import {
-    config
-} from 'dotenv';
 import bodyParser from 'body-parser';
 import connection from "./config/connection";
 import { graphqlHTTP } from "express-graphql";
-import { makeExecutableSchema } from '@graphql-tools/schema';
-import { ApolloServer, gql } from "apollo-server-express";
 import schema from './graphql/graphql';
 import swaggerJsDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
+
 
 const app = express();
 const mobile = require("./routes/mobile");

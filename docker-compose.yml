@@ -1,15 +1,28 @@
 version: '3.8'
 services:
-  node:
-      build: .
-      ports:
-        - 3000:3000
-      volumes:
-        - ./:/usr/src/app
-      depends_on:
+
+  api:
+    image: node:10.15.3-alpine
+    container_name: tqd-node
+    build: .
+    ports:
+      - 3000:3000
+    environment:
+     - NODE_ENV=production
+     - ES_HOST=elasticsearch
+     - NODE_PORT=3000
+     - ELASTIC_URL=http://elasticsearch:9200
+    volumes:
+       - ./:/usr/src/app
+    command: npm run start
+    links:
+        - elasticsearch
+    depends_on:
+        - elasticsearch
         - postgres
-      networks:
-        - postgres-backend
+        - redis
+    networks: 
+      - esnet
   postgres:
     container_name: postgres-typescript-db
     image: postgres:14.0
@@ -18,11 +31,6 @@ services:
       - postgres:/var/lib/postgresql/data
     ports:
       - 5430:5432
-      # - "6500:5432"
-    # environment:
-    #   POSTGRES_USER: root
-    #   POSTGRES_PASSWORD: toor
-    #   POSTGRES_DB: reservation
     env_file:
       - ./.env
     networks:
@@ -34,22 +42,56 @@ services:
       - '6379:6379'
     volumes:
       - redisDB:/data
-  elasticsearch:
-    container_name: tqd-elasticsearch
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.0.1
-    volumes:
-      - esdata:/usr/share/elasticsearch/data
-    environment:
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - discovery.type=single-node
-    logging:
-      driver: none
+    networks:
+      - postgres-backend
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.14.1
+    container_name: MY_KIBANA
     ports:
-      - 9300:9300
-      - 9200:9200
+      - 5601:5601
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    links:
+      - elasticsearch
     networks: 
       - postgres-backend
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
+    container_name: MY_ELASTICSEARCH
+    ports: 
+      - 9200:9200
+      - 9300:9300
+    environment:
+      discovery.type: single-node
+    volumes:
+      - ./esdata/:/usr/share/elasticsearch/data/
+    networks:
+      - postgres-backend
+  logstash:
+    build:
+      context: logstash/
+      # args:
+        # ELASTIC_VERSION: ${ELASTIC_VERSION}
+    volumes:
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,Z
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro,Z
+    ports:
+      - 5044:5044
+      - 50000:50000/tcp
+      - 50000:50000/udp
+      - 9600:9600
+    environment:
+      LS_JAVA_OPTS: -Xms256m -Xmx256m
+      LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD:-}
+    networks:
+      - postgres-backend
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
 
 volumes:
   postgres:

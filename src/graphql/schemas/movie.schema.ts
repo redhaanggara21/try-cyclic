@@ -27,6 +27,7 @@ const movieSchema: GraphQLSchema = makeExecutableSchema({
     type Query {
       getMovie(id: Int): Movie
       getMovieList: [Movie!]
+      getMovieSearch(search: String): [Movie!]
       getBestMoviePerAuthor(limit: Int): [Movie!]
     }
 
