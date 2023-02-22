@@ -1,5 +1,5 @@
   - ### End-Points Collection On Dir: //collection/insomnia.json
-    - Auth-User
+    - Auth-Users
       - `user/login`
       - `user/register`
       - `user/forgot-password`
