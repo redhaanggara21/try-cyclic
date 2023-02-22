@@ -14,7 +14,9 @@
     "tsc": "./node_modules/typescript/bin/tsc",
     "postinstall": "npm run build",
     "dev": "NODE_ENV=development concurrently \"tsc --watch\" \"nodemon build/app.js\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "utest": "jest src/tests/unit-test --detectOpenHandles --forceExit",
+    "itest": "jest src/tests/integration-test --detectOpenHandles --forceExit"
   },
   "keywords": [],
   "author": "red",
