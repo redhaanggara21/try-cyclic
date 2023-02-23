@@ -27,6 +27,11 @@
 
 
 ### Run
+- `npm install --save-dev sequelize-cli` init sequalize in directory for all data-acces clean architect
+  - `npx sequelize-cli init`
+    -  `npx sequelize-cli seed:generate --name demo-user` for seeder
+    -  `npx sequelize-cli model:generate --name User --attributes firstName:string,lastName:string,email:string` generate model
+    -  ``
 - `npm run dev` for build 
 - `npm run start:prod` for prod env 
 - `docker-compose up` for docker compose
